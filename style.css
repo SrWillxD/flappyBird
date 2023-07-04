@@ -7,11 +7,20 @@ body{
     width: 100vw;
 }
 main{
-    height: 650px;
-    width: 350px;
+    height: 670px;
+    width: 430px;
     position: relative;
     background-image: url(./assets/img/backgrounds/background-day.png);
     background-repeat: no-repeat;
     background-size: cover;
 
+}
+
+.imgBird{
+    position: absolute;
+    top: 300px;
+    left: 80px;
+    height: 57px;
+    width: 63px;
+    transform: scaleX(-1);
 }
