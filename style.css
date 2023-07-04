@@ -10,7 +10,7 @@ main{
     height: 650px;
     width: 350px;
     position: relative;
-    background-image: url(./assets/img/background-day.png);
+    background-image: url(./assets/img/backgrounds/background-day.png);
     background-repeat: no-repeat;
     background-size: cover;
 
