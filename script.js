@@ -58,9 +58,14 @@ function flapTheWings (){
     });
 
     const flap = ()=>{
+        if (heightBirdInPx - 150 >= 0) {
+            heightBirdInPx -= 150;
+        }else{
+            heightBirdInPx = heightBirdInPx - heightBirdInPx
+        }
+
         gravitySpeed = 0;
 
-        heightBirdInPx -= 150;
         imgBird.style.top = heightBirdInPx + 'px';
 
         rotationBirdAngle = 0;
