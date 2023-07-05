@@ -24,7 +24,7 @@ function gameInit(){
     });
 }
 let heightBirdInPx = 350;
-let rotationBirdAngle = 0
+let rotationBirdAngle = +5
 let gravitySpeed = 0;
 
 function gravity(){
@@ -56,19 +56,28 @@ function flapTheWings (){
             flap();
         }
     });
-
+    //TODO: Change the wingbeat logic as it goes over the edge
     const flap = ()=>{
         if (heightBirdInPx - 150 >= 0) {
-            heightBirdInPx -= 150;
+            let flapSetInterval= setInterval(() => {
+                heightBirdInPx -=4;
+                imgBird.style.top = heightBirdInPx + 'px';
+            }, 6);
+            
+            gravitySpeed = 0;
+            rotationBirdAngle = +10;
+            imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
+            
+            setTimeout(() => {
+                clearInterval(flapSetInterval);
+            }, 300);
         }else{
-            heightBirdInPx = heightBirdInPx - heightBirdInPx
+            heightBirdInPx -= heightBirdInPx;
+            imgBird.style.top = heightBirdInPx + 'px';
+            gravitySpeed = 0;
+            rotationBirdAngle = +10;
+            imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
         }
-
-        gravitySpeed = 0;
-
-        imgBird.style.top = heightBirdInPx + 'px';
-
-        rotationBirdAngle = 0;
-        imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
+        
     }
 }
