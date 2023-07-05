@@ -25,13 +25,12 @@ function gameInit(){
 }
 let heightBirdInPx = 350;
 let rotationBirdAngle = 0
+let gravitySpeed = 0;
 
 function gravity(){
-    let gravitySpeed = 0;
-
     const intervalGravity = setInterval(()=>{
-        gravitySpeed += 0.001;
-        heightBirdInPx += gravitySpeed + 0.001;
+        gravitySpeed += 0.01;
+        heightBirdInPx += gravitySpeed + 0.1;
         imgBird.style.top = heightBirdInPx + 'px';
 
         if(rotationBirdAngle > -90){
@@ -66,6 +65,5 @@ function flapTheWings (){
 
         rotationBirdAngle = 0;
         imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
-        console.log(gravitySpeed);
     }
 }
