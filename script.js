@@ -5,8 +5,16 @@ gameInit();
 function gameInit(){
     let gameAlreadyStarted = false;
 
-    document.addEventListener('mousedown', function(event) {
+    document.addEventListener('mousedown',(event)=>{
         if (event.button === 0 && gameAlreadyStarted === false) {
+            gameAlreadyStarted = true;
+
+            gravity();
+        }
+    });
+
+    document.addEventListener('keydown', function(event) {
+        if (event.code === 'Space') {
             gameAlreadyStarted = true;
 
             gravity();
@@ -30,7 +38,14 @@ function gravity(){
 
         if (heightBirdInPx >= 643) {
             clearInterval(intervalGravity);
-            console.log('O pássaro atingiu o chão.');
         }
     }, 1);
+}
+
+function flapTheWings (){
+    document.addEventListener('mousedown',(event)=>{
+        if(event.button === 0){
+            
+        }
+    });
 }
