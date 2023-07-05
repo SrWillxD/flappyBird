@@ -1,16 +1,27 @@
 const imgBird = document.querySelector('.imgBird');
 
-let initialClick = false;
+gameInit();
+
+function gameInit(){
+    let gameAlreadyStarted = false;
+
+    document.addEventListener('mousedown', function(event) {
+        if (event.button === 0 && gameAlreadyStarted === false) {
+            gameAlreadyStarted = true;
+
+            gravity();
+        }
+    });
+}
 
 function gravity(){
-    let heightBirdInPx = 400;
+    let heightBirdInPx = 350;
     let rotationBirdAngle = 0
     
     const intervalGravity = setInterval(()=>{
         heightBirdInPx += 1.2;
         imgBird.style.top = heightBirdInPx + 'px';
 
-        
         if(rotationBirdAngle > -90){
             rotationBirdAngle -= 0.4;
             console.log(rotationBirdAngle);
@@ -21,6 +32,5 @@ function gravity(){
             clearInterval(intervalGravity);
             console.log('O pássaro atingiu o chão.');
         }
-        }, 1);
+    }, 1);
 }
-gravity();
