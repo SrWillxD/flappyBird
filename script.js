@@ -147,13 +147,46 @@ function PairOfBarriers(altura, abertura, x){
     }
 
     this.getX = () => parseInt(this.element.style.left.split('px')[0]);
-    this.setX = () => this.element.style.left = `${x}px`;
+    this.setX = (x) => this.element.style.left = `${x}px`;
     this.getLargura = () => this.element.clientWidth;
 
     this.sortearAbertura();
     this.setX(x);
 }
 
-const b = new PairOfBarriers(700, 200, 400);
-tagMain.appendChild(b.element);
+/*const b = new PairOfBarriers(700, 200, 400);
+tagMain.appendChild(b.element);*/
 
+function Barriers(altura, largura, abertura, espaco, notificarPonto){
+    this.pares = [
+        new PairOfBarriers(altura, abertura, largura),
+        new PairOfBarriers(altura, abertura, largura + espaco),
+        new PairOfBarriers(altura, abertura, largura + espaco * 2),
+        new PairOfBarriers(altura, abertura, largura + espaco * 3)
+    ]
+
+    const deslocamento = 3;
+    this.animar = () => {
+        this.pares.forEach(par=>{
+            par.setX(par.getX() - deslocamento);
+
+            if(par.getX() < -par.getLargura()){
+                //! This can cause problems as the width will be different
+                par.setX(par.getX() + espaco * this.pares.length);
+                par.sortearAbertura();
+            }
+            //!The bird is not positioned in the middle, it will probably cause problems
+            const meio = largura / 2;
+            const cruzouOMeio = par.getX() + deslocamento <=meio && par.getX() < meio;
+            //if(cruzouOMeio)notificarPonto
+        })
+    }
+}
+
+const barreiras = new Barriers(700, 550, 250, 400);
+
+barreiras.pares.forEach(par => tagMain.appendChild(par.element));
+
+setInterval(()=>{
+    barreiras.animar();
+}, 20)
