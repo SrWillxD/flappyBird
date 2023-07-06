@@ -12,7 +12,7 @@ function gameInit(){
 
             gravity();
             flapTheWings();
-            generatePipes();
+            //generatePipes();
         }
     });
 
@@ -22,7 +22,7 @@ function gameInit(){
 
             gravity();
             flapTheWings();
-            generatePipes();
+            //generatePipes();
         }
     });
 }
@@ -85,7 +85,7 @@ function flapTheWings (){
     }
 }
 //TODO: Translate the names
-function generatePipes(){
+/*function generatePipes(){
     let parDeBarreiras = document.createElement('div');
     tagMain.appendChild(parDeBarreiras);
     parDeBarreiras.classList.add('parDeBarreiras');
@@ -111,4 +111,25 @@ function generatePipes(){
     parDeBarreiras.appendChild(barreiraBaixo);
     barreiraBaixo.appendChild(bordaBaixo)
     barreiraBaixo.appendChild(corpoBaixo)
+}*/
+
+function newElement(tagName, className){
+    const elem = document.createElement(tagName);
+    elem.className = className;
+    return elem;
 }
+
+function Barrier(reverse = false){
+    this.element = newElement('div', 'barreira');
+
+    const borda = newElement('div', 'borda');
+    const corpo = newElement('div', 'corpo');
+    this.element.appendChild(reverse ? corpo : borda);
+    this.element.appendChild(reverse ? borda : corpo);
+
+    this.setAltura = altura => corpo.style.heigth = `${altura}px`
+}
+
+const b = new Barrier(true);
+b.setAltura(200);
+tagMain.appendChild(b.element)
