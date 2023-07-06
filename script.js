@@ -59,7 +59,7 @@ function flapTheWings (){
             flap();
         }
     });
-    //TODO: Change the wingbeat logic as it goes over the edge
+    //! TODO: Change the wingbeat logic as it goes over the edge
     const flap = ()=>{
         if (heightBirdInPx - 150 >= 0) {
             let flapSetInterval= setInterval(() => {
@@ -84,7 +84,7 @@ function flapTheWings (){
         
     }
 }
-//TODO: Translate the names
+//! TODO: Translate the names
 /*function generatePipes(){
     let parDeBarreiras = document.createElement('div');
     tagMain.appendChild(parDeBarreiras);
@@ -112,13 +112,13 @@ function flapTheWings (){
     barreiraBaixo.appendChild(bordaBaixo)
     barreiraBaixo.appendChild(corpoBaixo)
 }*/
-
+//! TODO: Translate the names
 function newElement(tagName, className){
     const elem = document.createElement(tagName);
     elem.className = className;
     return elem;
 }
-
+//! TODO: Translate the names
 function Barrier(reverse = false){
     this.element = newElement('div', 'barreira');
 
@@ -127,9 +127,33 @@ function Barrier(reverse = false){
     this.element.appendChild(reverse ? corpo : borda);
     this.element.appendChild(reverse ? borda : corpo);
 
-    this.setAltura = altura => corpo.style.heigth = `${altura}px`
+    this.setAltura = altura => corpo.style.height = `${altura}px`
+}
+//! TODO: Translate the names
+function PairOfBarriers(altura, abertura, x){
+    this.element = newElement('div', 'parDeBarreiras');
+
+    this.superior = new Barrier(true);
+    this.inferior = new Barrier(false);
+
+    this.element.appendChild(this.superior.element);
+    this.element.appendChild(this.inferior.element);
+
+    this.sortearAbertura = () =>{
+        const alturaSuperior = Math.random() * (altura - abertura);
+        const alturaInferior = altura - abertura - alturaSuperior;
+        this.superior.setAltura(alturaSuperior);
+        this.inferior.setAltura(alturaInferior);
+    }
+
+    this.getX = () => parseInt(this.element.style.left.split('px')[0]);
+    this.setX = () => this.element.style.left = `${x}px`;
+    this.getLargura = () => this.element.clientWidth;
+
+    this.sortearAbertura();
+    this.setX(x);
 }
 
-const b = new Barrier(true);
-b.setAltura(200);
-tagMain.appendChild(b.element)
+const b = new PairOfBarriers(700, 200, 400);
+tagMain.appendChild(b.element);
+
