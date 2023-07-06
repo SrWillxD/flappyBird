@@ -1,4 +1,5 @@
 const imgBird = document.querySelector('.imgBird');
+const tagMain = document.querySelector('main');
 
 gameInit();
 
@@ -11,6 +12,7 @@ function gameInit(){
 
             gravity();
             flapTheWings();
+            generatePipes();
         }
     });
 
@@ -20,6 +22,7 @@ function gameInit(){
 
             gravity();
             flapTheWings();
+            generatePipes();
         }
     });
 }
@@ -80,4 +83,32 @@ function flapTheWings (){
         }
         
     }
+}
+//TODO: Translate the names
+function generatePipes(){
+    let parDeBarreiras = document.createElement('div');
+    tagMain.appendChild(parDeBarreiras);
+    parDeBarreiras.classList.add('parDeBarreiras');
+
+    let corpoCima = document.createElement('div');
+    corpoCima.classList.add('corpo')
+    let corpoBaixo = document.createElement('div');
+    corpoBaixo.classList.add('corpo')
+
+    let bordaCima = document.createElement('div');
+    bordaCima.classList.add('borda')
+    let bordaBaixo = document.createElement('div');
+    bordaBaixo.classList.add('borda')
+
+    let barreiraCima = document.createElement('div');
+    barreiraCima.classList.add('barreira');
+    parDeBarreiras.appendChild(barreiraCima);
+    barreiraCima.appendChild(corpoCima)
+    barreiraCima.appendChild(bordaCima)
+
+    let barreiraBaixo = document.createElement('div');
+    barreiraBaixo.classList.add('barreira');
+    parDeBarreiras.appendChild(barreiraBaixo);
+    barreiraBaixo.appendChild(bordaBaixo)
+    barreiraBaixo.appendChild(corpoBaixo)
 }
