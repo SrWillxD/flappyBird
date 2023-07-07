@@ -4,7 +4,7 @@ body{
     align-items: center;
     background-color: rgba(4, 12, 30);
     height: 100vh;
-    width: 100vw;
+    /*width: 100vw;*/
     user-select: none;
 }
 main{
@@ -15,6 +15,7 @@ main{
     background-repeat: no-repeat;
     background-size: cover;
     overflow: hidden;
+    /*transform: scaleX(-1);*/
 }
 /*
 main::before {
@@ -28,7 +29,7 @@ main::before {
     background-repeat: no-repeat;
     background-size: cover;
     transform: scaleX(-1);
-  }
+}
 */
 .imgBird{
     position: absolute;
@@ -77,4 +78,10 @@ main::before {
     font-size: 30px;
     color: rgb(255, 255, 255);
     z-index: 1;
+}
+
+@media (max-width : 560px){
+    body{
+        transform: scale(0.90);
+    }
 }
