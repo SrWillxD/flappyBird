@@ -60,12 +60,13 @@ function flapTheWings (){
         }
     });
     //! TODO: Change the wingbeat logic as it goes over the edge
+    //* Maybe implement a logic that when hitting the top or the ground, it is considered as game over
     const flap = ()=>{
         if (heightBirdInPx - 150 >= 0) {
             let flapSetInterval= setInterval(() => {
                 heightBirdInPx -=4;
                 imgBird.style.top = heightBirdInPx + 'px';
-            }, 6);
+            }, 8);
             
             gravitySpeed = 0;
             rotationBirdAngle = +10;
@@ -177,16 +178,29 @@ function Barriers(altura, largura, abertura, espaco, notificarPonto){
             }
             //!The bird is not positioned in the middle, it will probably cause problems
             const meio = largura / 2;
-            const cruzouOMeio = par.getX() + deslocamento <=meio && par.getX() < meio;
-            //if(cruzouOMeio)notificarPonto
+            const cruzouOMeio = par.getX() + deslocamento >=meio && par.getX() < meio;
+            
+            if(cruzouOMeio){
+                notificarPonto();
+            } 
         })
     }
 }
 
-const barreiras = new Barriers(700, 550, 250, 400);
+const barreiras = new Barriers(700, 550, 240, 400);
 
 barreiras.pares.forEach(par => tagMain.appendChild(par.element));
+tagMain.appendChild(new Progress().element);
 
 setInterval(()=>{
     barreiras.animar();
 }, 20)
+
+
+function Progress(){
+    this.element = newElement('span', 'progress');
+    this.updatePoints = (points) =>{
+        this.element.innerHTML = points;
+    }
+    this.updatePoints(0);
+}
