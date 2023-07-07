@@ -98,3 +98,15 @@ main::before {
         width: 460px;
     }
 }
+
+@media (max-width : 468px){
+    main{
+        width: 440px;
+    }
+}
+
+@media (max-width : 445px){
+    main{
+        width: 420px;
+    }
+}
