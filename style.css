@@ -81,7 +81,20 @@ main::before {
 }
 
 @media (max-width : 560px){
-    body{
-        transform: scale(0.90);
+    main{
+        width: 500px;
+    }
+}
+
+
+@media (max-width : 510px){
+    main{
+        width: 490px;
+    }
+}
+
+@media (max-width : 490px){
+    main{
+        width: 460px;
     }
 }
