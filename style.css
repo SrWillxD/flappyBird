@@ -14,6 +14,7 @@ main{
     background-image: url(./assets/img/backgrounds/background.gif);
     background-repeat: no-repeat;
     background-size: cover;
+    overflow: hidden;
 }
 /*
 main::before {
@@ -55,15 +56,24 @@ main::before {
 
 .barreira .borda{
     height: 30px;
-    width: 130px;
-    background: linear-gradient(90deg, #000ed1, #080027);
+    width: 73px;
+    background: linear-gradient(90deg, #010a7d, #2500ba);
     border: 2px solid #000;
 }
 
 .barreira .corpo{
     height: 150px;
-    width: 110px;
-    background: linear-gradient(90deg, #000ed1, #080027);
+    width: 60px;
+    background: linear-gradient(90deg, #00087c, #1d0091);
     border-left: 2px solid #000;
     border-right: 2px solid #000;
+}
+
+.progress{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 30px;
+    color: rgb(255, 255, 255);
 }
