@@ -19,9 +19,14 @@ function gameInit(){
             tagMain.appendChild(progress.element);
             barreiras.pares.forEach(par => tagMain.appendChild(par.element));
             
+            
+            
             //! TODO: Maybe put it in a variable to change the state of the barriers elsewhere
             setInterval(()=>{
                 barreiras.animar();
+                if(colidiu(imgBird,barreiras)){
+                    console.log("BATEU")
+                }
             }, 20)
         }
     });
@@ -210,4 +215,28 @@ function Progress(){
         this.element.innerHTML = points;
     }
     this.updatePoints(0);
+}
+
+//! TODO: Translate the names
+function estaoSobrepostos(elementoA, elementoB){
+    const a = elementoA.getBoundingClientRect();
+    const b = elementoB.getBoundingClientRect();
+
+    const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left;
+    const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top;
+    
+    return horizontal && vertical;
+}
+//! TODO: Translate the names
+function colidiu(passaro, barreiras){
+    let colidiu = false;
+
+    barreiras.pares.forEach(parDeBarreiras =>{
+        if (!colidiu) {
+            const superior = parDeBarreiras.superior.element;
+            const inferior = parDeBarreiras.inferior.element;
+            colidiu = estaoSobrepostos(passaro, superior) || estaoSobrepostos(passaro, inferior);
+        }
+    })
+    return colidiu;
 }
