@@ -110,3 +110,9 @@ main::before {
         width: 420px;
     }
 }
+
+@media (max-width : 445px){
+    main{
+        transform: scale(0.95);
+    }
+}
