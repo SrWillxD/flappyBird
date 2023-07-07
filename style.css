@@ -14,7 +14,7 @@ main{
     background-image: url(./assets/img/backgrounds/background.gif);
     background-repeat: no-repeat;
     background-size: cover;
-    /*overflow: hidden;*/
+    overflow: hidden;
 }
 /*
 main::before {
