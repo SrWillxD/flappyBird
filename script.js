@@ -10,27 +10,23 @@ function gameInit(){
     document.addEventListener('mousedown',(event)=>{
         if (event.button === 0 && gameAlreadyStarted === false) {
             gameAlreadyStarted = true;
-            
             gravity();
             flapTheWings();
             const progress = new Progress();
-            const barreiras = new Barriers(700, 550, 240, 400, ()=>progress.updatePoints(++points));
+            const barreiras = new Barriers(700, 550, 250, 400, ()=>progress.updatePoints(++points));
             
             tagMain.appendChild(progress.element);
             barreiras.pares.forEach(par => tagMain.appendChild(par.element));
             
-            
-            
-            //! TODO: Maybe put it in a variable to change the state of the barriers elsewhere
-            setInterval(()=>{
-                barreiras.animar();
+            const animaGame = setInterval(()=>{
                 if(colidiu(imgBird,barreiras)){
-                    console.log("BATEU")
+                    clearInterval(animaGame);
                 }
+                barreiras.animar();
             }, 20)
         }
     });
-
+    
     document.addEventListener('keydown', function(event) {
         if (event.code === 'Space' && gameAlreadyStarted === false) {
             gameAlreadyStarted = true;
@@ -38,16 +34,17 @@ function gameInit(){
             gravity();
             flapTheWings();
             const progress = new Progress();
-            const barreiras = new Barriers(700, 550, 240, 400, ()=>progress.updatePoints(++points));
+            const barreiras = new Barriers(700, 550, 250, 400, ()=>progress.updatePoints(++points));
             
             tagMain.appendChild(progress.element);
             barreiras.pares.forEach(par => tagMain.appendChild(par.element));
             
-            //! TODO: Maybe put it in a variable to change the state of the barriers elsewhere
-            setInterval(()=>{
+            const animaGame = setInterval(()=>{
+                if(colidiu(imgBird,barreiras)){
+                    clearInterval(animaGame);
+                }
                 barreiras.animar();
             }, 20)
-            
         }
     });
 }
@@ -60,12 +57,12 @@ function gravity(){
         gravitySpeed += 0.01;
         heightBirdInPx += gravitySpeed + 0.1;
         imgBird.style.top = heightBirdInPx + 'px';
-
+        
         if(rotationBirdAngle > -90){
             rotationBirdAngle -= 0.2;
             imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
         }
-
+        
         if (heightBirdInPx >= 643) {
             clearInterval(intervalGravity);
         }
@@ -110,34 +107,7 @@ function flapTheWings (){
         
     }
 }
-//! TODO: Translate the names
-/*function generatePipes(){
-    let parDeBarreiras = document.createElement('div');
-    tagMain.appendChild(parDeBarreiras);
-    parDeBarreiras.classList.add('parDeBarreiras');
 
-    let corpoCima = document.createElement('div');
-    corpoCima.classList.add('corpo')
-    let corpoBaixo = document.createElement('div');
-    corpoBaixo.classList.add('corpo')
-
-    let bordaCima = document.createElement('div');
-    bordaCima.classList.add('borda')
-    let bordaBaixo = document.createElement('div');
-    bordaBaixo.classList.add('borda')
-
-    let barreiraCima = document.createElement('div');
-    barreiraCima.classList.add('barreira');
-    parDeBarreiras.appendChild(barreiraCima);
-    barreiraCima.appendChild(corpoCima)
-    barreiraCima.appendChild(bordaCima)
-
-    let barreiraBaixo = document.createElement('div');
-    barreiraBaixo.classList.add('barreira');
-    parDeBarreiras.appendChild(barreiraBaixo);
-    barreiraBaixo.appendChild(bordaBaixo)
-    barreiraBaixo.appendChild(corpoBaixo)
-}*/
 //! TODO: Translate the names
 function newElement(tagName, className){
     const elem = document.createElement(tagName);
