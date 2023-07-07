@@ -14,7 +14,7 @@ main{
     background-image: url(./assets/img/backgrounds/background.gif);
     background-repeat: no-repeat;
     background-size: cover;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 /*
 main::before {
@@ -76,4 +76,5 @@ main::before {
     font-family: 'Press Start 2P', cursive;
     font-size: 30px;
     color: rgb(255, 255, 255);
+    z-index: 1;
 }

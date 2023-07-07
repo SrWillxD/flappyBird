@@ -5,24 +5,44 @@ gameInit();
 
 function gameInit(){
     let gameAlreadyStarted = false;
-
+    let points = 0;
+    
     document.addEventListener('mousedown',(event)=>{
         if (event.button === 0 && gameAlreadyStarted === false) {
             gameAlreadyStarted = true;
-
+            
             gravity();
             flapTheWings();
-            //generatePipes();
+            const progress = new Progress();
+            const barreiras = new Barriers(700, 550, 240, 400, ()=>progress.updatePoints(++points));
+            
+            tagMain.appendChild(progress.element);
+            barreiras.pares.forEach(par => tagMain.appendChild(par.element));
+            
+            //! TODO: Maybe put it in a variable to change the state of the barriers elsewhere
+            setInterval(()=>{
+                barreiras.animar();
+            }, 20)
         }
     });
 
     document.addEventListener('keydown', function(event) {
         if (event.code === 'Space' && gameAlreadyStarted === false) {
             gameAlreadyStarted = true;
-
+            
             gravity();
             flapTheWings();
-            //generatePipes();
+            const progress = new Progress();
+            const barreiras = new Barriers(700, 550, 240, 400, ()=>progress.updatePoints(++points));
+            
+            tagMain.appendChild(progress.element);
+            barreiras.pares.forEach(par => tagMain.appendChild(par.element));
+            
+            //! TODO: Maybe put it in a variable to change the state of the barriers elsewhere
+            setInterval(()=>{
+                barreiras.animar();
+            }, 20)
+            
         }
     });
 }
@@ -155,8 +175,6 @@ function PairOfBarriers(altura, abertura, x){
     this.setX(x);
 }
 
-/*const b = new PairOfBarriers(700, 200, 400);
-tagMain.appendChild(b.element);*/
 
 function Barriers(altura, largura, abertura, espaco, notificarPonto){
     this.pares = [
@@ -176,8 +194,7 @@ function Barriers(altura, largura, abertura, espaco, notificarPonto){
                 par.setX(par.getX() + espaco * this.pares.length);
                 par.sortearAbertura();
             }
-            //!The bird is not positioned in the middle, it will probably cause problems
-            const meio = largura / 2;
+            const meio = (largura / 2) -200;
             const cruzouOMeio = par.getX() + deslocamento >=meio && par.getX() < meio;
             
             if(cruzouOMeio){
@@ -186,16 +203,6 @@ function Barriers(altura, largura, abertura, espaco, notificarPonto){
         })
     }
 }
-
-const barreiras = new Barriers(700, 550, 240, 400);
-
-barreiras.pares.forEach(par => tagMain.appendChild(par.element));
-tagMain.appendChild(new Progress().element);
-
-setInterval(()=>{
-    barreiras.animar();
-}, 20)
-
 
 function Progress(){
     this.element = newElement('span', 'progress');
