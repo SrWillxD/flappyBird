@@ -6,48 +6,37 @@ gameInit();
 function gameInit(){
     let gameAlreadyStarted = false;
     let points = 0;
-    //! Transfer the contents of these two events into a function and call the function within the events
+    
     document.addEventListener('mousedown',(event)=>{
         if (event.button === 0 && gameAlreadyStarted === false) {
-            gameAlreadyStarted = true;
-
-            gravity();
-            flapTheWings();
-            const progress = new Progress();
-            const barriers = new Barriers(700, 500, 250, 400, ()=>progress.updatePoints(++points));
-            
-            tagMain.appendChild(progress.element);
-            barriers.pairs.forEach(pair => tagMain.appendChild(pair.element));
-            
-            const moveBarriers = setInterval(()=>{
-                if(collided(imgBird, barriers)){
-                    clearInterval(moveBarriers);
-                }
-                barriers.animate();
-            }, 20);
+            init();
         }
     });
     
     document.addEventListener('keydown', function(event) {
         if (event.code === 'Space' && gameAlreadyStarted === false) {
-            gameAlreadyStarted = true;
-            
-            gravity();
-            flapTheWings();
-            const progress = new Progress();
-            const barriers = new Barriers(700, 500, 250, 400, ()=>progress.updatePoints(++points));
-            
-            tagMain.appendChild(progress.element);
-            barriers.pairs.forEach(pair => tagMain.appendChild(pair.element));
-            
-            const moveBarriers = setInterval(()=>{
-                if(collided(imgBird,barriers)){
-                    clearInterval(moveBarriers);
-                }
-                barriers.animate();
-            }, 20)
+            init();
         }
     });
+
+    const init = () =>{
+        gameAlreadyStarted = true;
+
+        gravity();
+        flapTheWings();
+        const progress = new Progress();
+        const barriers = new Barriers(700, 500, 250, 400, ()=>progress.updatePoints(++points));
+        
+        tagMain.appendChild(progress.element);
+        barriers.pairs.forEach(pair => tagMain.appendChild(pair.element));
+        
+        const moveBarriers = setInterval(()=>{
+            if(collided(imgBird, barriers)){
+                clearInterval(moveBarriers);
+            }
+            barriers.animate();
+        }, 20);
+    }
 }
 
 
