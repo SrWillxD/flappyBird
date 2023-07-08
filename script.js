@@ -24,6 +24,7 @@ function gameInit(){
 
         gravity();
         flapTheWings();
+        
         const progress = new Progress();
         const barriers = new Barriers(700, 500, 250, 400, ()=>progress.updatePoints(++points));
         
@@ -31,12 +32,17 @@ function gameInit(){
         barriers.pairs.forEach(pair => tagMain.appendChild(pair.element));
         
         moveBarriers = setInterval(()=>{
-            if(collided(imgBird, barriers)){
-                clearInterval(moveBarriers);
-                clearInterval(intervalGravity);
-            }
             barriers.animate();
         }, 20);
+        
+        setInterval(()=>{
+            if(collided(imgBird, barriers) || collisionOnTopOrBottom){
+                clearInterval(moveBarriers);
+                clearInterval(intervalGravity);
+                collisionOnTopOrBottom = true;
+            }
+        },1);
+        
     }
 }
 
