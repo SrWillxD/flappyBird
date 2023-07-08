@@ -1,8 +1,9 @@
+//! TODO: Maybe implement a way that when there is a collision the screen flashes and the bird falls to the ground
+//! TODO: Maybe implement the downward tilt of the bird again, however, putting a longer interval for the start of the tilt so as not to interfere with collision detection.
 const imgBird = document.querySelector('.imgBird');
 const tagMain = document.querySelector('main');
 
 gameInit();
-
 function gameInit(){
     let gameAlreadyStarted = false;
     let points = 0;
@@ -42,30 +43,21 @@ function gameInit(){
                 collisionOnTopOrBottom = true;
             }
         },1);
-        
     }
 }
 
-
 let heightBirdInPx = 350;
-let rotationBirdAngle = +5;
 let gravitySpeed = 0;
 let collisionOnTopOrBottom = false;
 let moveBarriers;
 let intervalGravity;
 
-//! This gravity needs to be refactored, the logic used does not satisfy when the bird hits the ground
 function gravity(){
     intervalGravity = setInterval(()=>{
         if(collisionOnTopOrBottom === false){
         gravitySpeed += 0.01;
         heightBirdInPx += gravitySpeed + 0.1;
         imgBird.style.top = heightBirdInPx + 'px';
-        
-        if(rotationBirdAngle > -90){
-            rotationBirdAngle -= 0.2;
-            imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
-        }
         
         if (heightBirdInPx >= 643) {
             clearInterval(intervalGravity);
@@ -75,32 +67,20 @@ function gravity(){
     },1);
 }
 
-//! TODO: Change the wingbeat logic as it goes over the edge
-//* Maybe implement a logic that when hitting the top or the ground, it is considered as game over
 function flapTheWings (){
     document.addEventListener('mousedown',(event)=>{
         if(event.button === 0 && !collisionOnTopOrBottom){
             flap();
         }
     });
+
     document.addEventListener('keydown', function(event) {
         if (event.code === 'Space' && !collisionOnTopOrBottom) {
             flap();
         }
     });
 
-    const flap = ()=>{
-        /*if (heightBirdInPx - 150 >= 0) {
-            
-            
-        }else{
-            heightBirdInPx -= heightBirdInPx;
-            imgBird.style.top = heightBirdInPx + 'px';
-            gravitySpeed = 0;
-            rotationBirdAngle = +10;
-            imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
-        }*/
-        
+    const flap = () => {
         let flapSetInterval = setInterval(() => {
             heightBirdInPx -=4;
             imgBird.style.top = heightBirdInPx + 'px';
@@ -110,10 +90,14 @@ function flapTheWings (){
                 collisionOnTopOrBottom = true;
             }
         }, 10);
+
+        setInterval(()=>{
+            if(collisionOnTopOrBottom){
+                clearInterval(flapSetInterval);
+            }
+        },1)
         
         gravitySpeed = 0;
-        rotationBirdAngle = +10;
-        imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
         
         setTimeout(() => {
             clearInterval(flapSetInterval);
@@ -169,11 +153,11 @@ function Barriers(displayHeight, displayWidth, barrierOpening, spaceBetweenBarri
         new PairOfBarriers(displayHeight, barrierOpening, displayWidth + spaceBetweenBarriers),
         new PairOfBarriers(displayHeight, barrierOpening, displayWidth + spaceBetweenBarriers * 2),
         new PairOfBarriers(displayHeight, barrierOpening, displayWidth + spaceBetweenBarriers * 3)
-    ]
+    ];
 
     const numberOfPixelsPerShift = 3;
     this.animate = () => {
-        this.pairs.forEach( pair =>{
+        this.pairs.forEach( pair => {
             pair.setX(pair.getX() - numberOfPixelsPerShift);
 
             if(pair.getX() < -pair.getWidth()){
@@ -193,9 +177,11 @@ function Barriers(displayHeight, displayWidth, barrierOpening, spaceBetweenBarri
 
 function Progress(){
     this.element = newElement('span', 'progress');
+
     this.updatePoints = (points) =>{
         this.element.innerHTML = points;
     }
+
     this.updatePoints(0);
 }
 
@@ -219,5 +205,6 @@ function collided(bird, barriers){
             collided = areTheyOverlapping(bird, upperBarrier) || areTheyOverlapping(bird, bottomBarrier);
         }
     })
+
     return collided;
 }
