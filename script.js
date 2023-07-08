@@ -6,24 +6,25 @@ gameInit();
 function gameInit(){
     let gameAlreadyStarted = false;
     let points = 0;
-    
+    //! Transfer the contents of these two events into a function and call the function within the events
     document.addEventListener('mousedown',(event)=>{
         if (event.button === 0 && gameAlreadyStarted === false) {
             gameAlreadyStarted = true;
+
             gravity();
             flapTheWings();
             const progress = new Progress();
-            const barreiras = new Barriers(700, 550, 250, 400, ()=>progress.updatePoints(++points));
+            const barriers = new Barriers(700, 500, 250, 400, ()=>progress.updatePoints(++points));
             
             tagMain.appendChild(progress.element);
-            barreiras.pares.forEach(par => tagMain.appendChild(par.element));
+            barriers.pairs.forEach(pair => tagMain.appendChild(pair.element));
             
-            const animaGame = setInterval(()=>{
-                if(colidiu(imgBird,barreiras)){
-                    clearInterval(animaGame);
+            const moveBarriers = setInterval(()=>{
+                if(collided(imgBird, barriers)){
+                    clearInterval(moveBarriers);
                 }
-                barreiras.animar();
-            }, 20)
+                barriers.animate();
+            }, 20);
         }
     });
     
@@ -34,22 +35,24 @@ function gameInit(){
             gravity();
             flapTheWings();
             const progress = new Progress();
-            const barreiras = new Barriers(700, 550, 250, 400, ()=>progress.updatePoints(++points));
+            const barriers = new Barriers(700, 500, 250, 400, ()=>progress.updatePoints(++points));
             
             tagMain.appendChild(progress.element);
-            barreiras.pares.forEach(par => tagMain.appendChild(par.element));
+            barriers.pairs.forEach(pair => tagMain.appendChild(pair.element));
             
-            const animaGame = setInterval(()=>{
-                if(colidiu(imgBird,barreiras)){
-                    clearInterval(animaGame);
+            const moveBarriers = setInterval(()=>{
+                if(collided(imgBird,barriers)){
+                    clearInterval(moveBarriers);
                 }
-                barreiras.animar();
+                barriers.animate();
             }, 20)
         }
     });
 }
+
+
 let heightBirdInPx = 350;
-let rotationBirdAngle = +5
+let rotationBirdAngle = +5;
 let gravitySpeed = 0;
 
 function gravity(){
@@ -75,7 +78,6 @@ function flapTheWings (){
             flap();
         }
     });
-
     document.addEventListener('keydown', function(event) {
         if (event.code === 'Space') {
             flap();
@@ -88,7 +90,7 @@ function flapTheWings (){
             let flapSetInterval= setInterval(() => {
                 heightBirdInPx -=4;
                 imgBird.style.top = heightBirdInPx + 'px';
-            }, 8);
+            }, 10);
             
             gravitySpeed = 0;
             rotationBirdAngle = +10;
@@ -108,74 +110,73 @@ function flapTheWings (){
     }
 }
 
-//! TODO: Translate the names
 function newElement(tagName, className){
     const elem = document.createElement(tagName);
     elem.className = className;
     return elem;
 }
-//! TODO: Translate the names
+
 function Barrier(reverse = false){
-    this.element = newElement('div', 'barreira');
+    this.element = newElement('div', 'barrier');
 
-    const borda = newElement('div', 'borda');
-    const corpo = newElement('div', 'corpo');
-    this.element.appendChild(reverse ? corpo : borda);
-    this.element.appendChild(reverse ? borda : corpo);
+    const barrierEdge = newElement('div', 'barrierEdge');
+    const barrierBody = newElement('div', 'barrierBody');
+    this.element.appendChild(reverse ? barrierBody : barrierEdge);
+    this.element.appendChild(reverse ? barrierEdge : barrierBody);
 
-    this.setAltura = altura => corpo.style.height = `${altura}px`
+    this.setHeight = height => barrierBody.style.height = `${height}px`;
 }
-//! TODO: Translate the names
-function PairOfBarriers(altura, abertura, x){
-    this.element = newElement('div', 'parDeBarreiras');
 
-    this.superior = new Barrier(true);
-    this.inferior = new Barrier(false);
+function PairOfBarriers(displayHeight, barrierOpening, barrierXAxis){
+    this.element = newElement('div', 'pairOfBarriers');
 
-    this.element.appendChild(this.superior.element);
-    this.element.appendChild(this.inferior.element);
+    this.upperBarrier = new Barrier(true);
+    this.bottomBarrier = new Barrier(false);
 
-    this.sortearAbertura = () =>{
-        const alturaSuperior = Math.random() * (altura - abertura);
-        const alturaInferior = altura - abertura - alturaSuperior;
-        this.superior.setAltura(alturaSuperior);
-        this.inferior.setAltura(alturaInferior);
+    this.element.appendChild(this.upperBarrier.element);
+    this.element.appendChild(this.bottomBarrier.element);
+
+    this.raffleBarrierOpening = () =>{
+        const heightOfUpperBarrier = Math.random() * (displayHeight - barrierOpening);
+        const lowerBarrierHeight = displayHeight - barrierOpening - heightOfUpperBarrier;
+        this.upperBarrier.setHeight(heightOfUpperBarrier);
+        this.bottomBarrier.setHeight(lowerBarrierHeight);
     }
 
     this.getX = () => parseInt(this.element.style.left.split('px')[0]);
-    this.setX = (x) => this.element.style.left = `${x}px`;
-    this.getLargura = () => this.element.clientWidth;
+    this.setX = (barrierXAxis) => this.element.style.left = `${barrierXAxis}px`;
+    this.getWidth = () => this.element.clientWidth;
 
-    this.sortearAbertura();
-    this.setX(x);
+    this.raffleBarrierOpening();
+    this.setX(barrierXAxis);
 }
 
 
-function Barriers(altura, largura, abertura, espaco, notificarPonto){
-    this.pares = [
-        new PairOfBarriers(altura, abertura, largura),
-        new PairOfBarriers(altura, abertura, largura + espaco),
-        new PairOfBarriers(altura, abertura, largura + espaco * 2),
-        new PairOfBarriers(altura, abertura, largura + espaco * 3)
+function Barriers(displayHeight, displayWidth, barrierOpening, spaceBetweenBarriers, notifyPoint){
+    this.pairs = [
+        new PairOfBarriers(displayHeight, barrierOpening, displayWidth),
+        new PairOfBarriers(displayHeight, barrierOpening, displayWidth + spaceBetweenBarriers),
+        new PairOfBarriers(displayHeight, barrierOpening, displayWidth + spaceBetweenBarriers * 2),
+        new PairOfBarriers(displayHeight, barrierOpening, displayWidth + spaceBetweenBarriers * 3)
     ]
 
-    const deslocamento = 3;
-    this.animar = () => {
-        this.pares.forEach(par=>{
-            par.setX(par.getX() - deslocamento);
+    const numberOfPixelsPerShift = 3;
+    this.animate = () => {
+        this.pairs.forEach( pair =>{
+            pair.setX(pair.getX() - numberOfPixelsPerShift);
 
-            if(par.getX() < -par.getLargura()){
-                //! This can cause problems as the width will be different
-                par.setX(par.getX() + espaco * this.pares.length);
-                par.sortearAbertura();
+            if(pair.getX() < -pair.getWidth()){
+                pair.setX(pair.getX() + spaceBetweenBarriers * this.pairs.length);
+                pair.raffleBarrierOpening();
             }
-            const meio = (largura / 2) -200;
-            const cruzouOMeio = par.getX() + deslocamento >=meio && par.getX() < meio;
+
+            const scoringLocation = (displayWidth/2) -200;
+            const crossedTheScoringSite = pair.getX() + numberOfPixelsPerShift >= scoringLocation && pair.getX() < scoringLocation;
             
-            if(cruzouOMeio){
-                notificarPonto();
+            if(crossedTheScoringSite){
+                notifyPoint();
             } 
-        })
+        });
     }
 }
 
@@ -187,26 +188,25 @@ function Progress(){
     this.updatePoints(0);
 }
 
-//! TODO: Translate the names
-function estaoSobrepostos(elementoA, elementoB){
-    const a = elementoA.getBoundingClientRect();
-    const b = elementoB.getBoundingClientRect();
+function areTheyOverlapping(bird, barrier){
+    const a = bird.getBoundingClientRect();
+    const b = barrier.getBoundingClientRect();
 
     const horizontal = a.left + a.width >= b.left && b.left + b.width >= a.left;
     const vertical = a.top + a.height >= b.top && b.top + b.height >= a.top;
     
     return horizontal && vertical;
 }
-//! TODO: Translate the names
-function colidiu(passaro, barreiras){
-    let colidiu = false;
 
-    barreiras.pares.forEach(parDeBarreiras =>{
-        if (!colidiu) {
-            const superior = parDeBarreiras.superior.element;
-            const inferior = parDeBarreiras.inferior.element;
-            colidiu = estaoSobrepostos(passaro, superior) || estaoSobrepostos(passaro, inferior);
+function collided(bird, barriers){
+    let collided = false;
+
+    barriers.pairs.forEach(pairOfBarriers =>{
+        if (!collided) {
+            const upperBarrier = pairOfBarriers.upperBarrier.element;
+            const bottomBarrier = pairOfBarriers.bottomBarrier.element;
+            collided = areTheyOverlapping(bird, upperBarrier) || areTheyOverlapping(bird, bottomBarrier);
         }
     })
-    return colidiu;
+    return collided;
 }
