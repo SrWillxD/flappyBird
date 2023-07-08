@@ -30,9 +30,10 @@ function gameInit(){
         tagMain.appendChild(progress.element);
         barriers.pairs.forEach(pair => tagMain.appendChild(pair.element));
         
-        const moveBarriers = setInterval(()=>{
+        moveBarriers = setInterval(()=>{
             if(collided(imgBird, barriers)){
                 clearInterval(moveBarriers);
+                clearInterval(intervalGravity);
             }
             barriers.animate();
         }, 20);
@@ -43,9 +44,14 @@ function gameInit(){
 let heightBirdInPx = 350;
 let rotationBirdAngle = +5;
 let gravitySpeed = 0;
+let collisionOnTopOrBottom = false;
+let moveBarriers;
+let intervalGravity;
 
+//! This gravity needs to be refactored, the logic used does not satisfy when the bird hits the ground
 function gravity(){
-    const intervalGravity = setInterval(()=>{
+    intervalGravity = setInterval(()=>{
+        if(collisionOnTopOrBottom === false){
         gravitySpeed += 0.01;
         heightBirdInPx += gravitySpeed + 0.1;
         imgBird.style.top = heightBirdInPx + 'px';
@@ -57,45 +63,55 @@ function gravity(){
         
         if (heightBirdInPx >= 643) {
             clearInterval(intervalGravity);
+            collisionOnTopOrBottom = true;
         }
-    }, 1);
+        }
+    },1);
 }
 
+//! TODO: Change the wingbeat logic as it goes over the edge
+//* Maybe implement a logic that when hitting the top or the ground, it is considered as game over
 function flapTheWings (){
     document.addEventListener('mousedown',(event)=>{
-        if(event.button === 0){
+        if(event.button === 0 && !collisionOnTopOrBottom){
             flap();
         }
     });
     document.addEventListener('keydown', function(event) {
-        if (event.code === 'Space') {
+        if (event.code === 'Space' && !collisionOnTopOrBottom) {
             flap();
         }
     });
-    //! TODO: Change the wingbeat logic as it goes over the edge
-    //* Maybe implement a logic that when hitting the top or the ground, it is considered as game over
+
     const flap = ()=>{
-        if (heightBirdInPx - 150 >= 0) {
-            let flapSetInterval= setInterval(() => {
-                heightBirdInPx -=4;
-                imgBird.style.top = heightBirdInPx + 'px';
-            }, 10);
+        /*if (heightBirdInPx - 150 >= 0) {
             
-            gravitySpeed = 0;
-            rotationBirdAngle = +10;
-            imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
             
-            setTimeout(() => {
-                clearInterval(flapSetInterval);
-            }, 300);
         }else{
             heightBirdInPx -= heightBirdInPx;
             imgBird.style.top = heightBirdInPx + 'px';
             gravitySpeed = 0;
             rotationBirdAngle = +10;
             imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
-        }
+        }*/
         
+        let flapSetInterval = setInterval(() => {
+            heightBirdInPx -=4;
+            imgBird.style.top = heightBirdInPx + 'px';
+
+            if(heightBirdInPx <=0){
+                clearInterval(flapSetInterval);
+                collisionOnTopOrBottom = true;
+            }
+        }, 10);
+        
+        gravitySpeed = 0;
+        rotationBirdAngle = +10;
+        imgBird.style.transform = `scaleX(-1) rotate(${rotationBirdAngle}deg)`;
+        
+        setTimeout(() => {
+            clearInterval(flapSetInterval);
+        }, 300);
     }
 }
 
