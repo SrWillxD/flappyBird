@@ -1,0 +1,1 @@
+![GIF](assets/img/flappy.gif)

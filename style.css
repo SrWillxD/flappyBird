@@ -106,7 +106,6 @@ main::before {
     }
 }
 
-
 @media (max-width : 510px){
     main{
         width: 490px;
