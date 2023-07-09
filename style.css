@@ -80,6 +80,26 @@ main::before {
     z-index: 1;
 }
 
+.playAgain{
+    display: none;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 13px;
+    color: rgb(255, 255, 255);
+    background-color: #000;
+    border: none;
+    border-radius: 5px;
+    z-index: 1;
+    animation: blinkingText 1s infinite;
+}
+
+@keyframes blinkingText {
+    49% { color: rgb(0, 0, 0); }
+    51% { color: rgb(255, 255, 255); }
+}
+
 @media (max-width : 560px){
     main{
         width: 500px;
