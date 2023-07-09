@@ -1,6 +1,3 @@
-//! TODO: Maybe implement a way that when there is a collision the screen flashes and the bird falls to the ground
-//! TODO: Maybe implement the downward tilt of the bird again, however, putting a longer interval for the start of the tilt so as not to interfere with collision detection.
-//! TODO: Button to restart the game
 const imgBird = document.querySelector('.imgBird');
 const tagMain = document.querySelector('main');
 
